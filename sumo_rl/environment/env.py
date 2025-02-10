@@ -95,7 +95,7 @@ class SumoEnvironment(gym.Env):
         min_green: int = 5,
         max_green: int = 50,
         single_agent: bool = False,
-        reward_fn: Union[str, Callable, dict] = "diff-waiting-time",
+        reward_fn: Union[str, Callable, dict] = "custom",
         observation_class: ObservationFunction = DefaultObservationFunction,
         add_system_info: bool = True,
         add_per_agent_info: bool = True,

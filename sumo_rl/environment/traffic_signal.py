@@ -200,6 +200,16 @@ class TrafficSignal:
         self.last_measure = ts_wait
         return reward
 
+    def _my_reward_fn(self):
+         ts_wait = sum(self.get_accumulated_waiting_time_per_lane()) / 100.0  # Normalizing waiting time
+         queue_length = self.get_total_queued()  # Total queued vehicles
+
+         # Computing the difference in waiting time (similar to _diff_waiting_time_reward)
+         reward = (self.last_measure - 2*ts_wait) - 4*(queue_length)
+         self.last_measure = ts_wait  
+         return reward
+
+
     def _observation_fn_default(self):
         phase_id = [1 if self.green_phase == i else 0 for i in range(self.num_green_phases)]  # one-hot encoding
         min_green = [0 if self.time_since_last_phase_change < self.min_green + self.yellow_time else 1]
@@ -310,4 +320,5 @@ class TrafficSignal:
         "average-speed": _average_speed_reward,
         "queue": _queue_reward,
         "pressure": _pressure_reward,
+        "custom": _my_reward_fn
     }
